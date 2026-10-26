@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CampusTrack • Attendance</title><link rel="stylesheet" href="/static/style.css"></head>
+<body class="dashboard-body" data-role="{{ user.role }}">
+<div class="app-shell">
+ <aside class="sidebar"><div class="brand"><span class="brand-mark">CT</span><span>Campus<span class="brand-accent">Track</span></span></div>
+   <div class="nav-section">WORKSPACE</div>
+   <a href="{{ '/' if user.role == 'admin' else '/student' }}" class="nav-link active"><span class="nav-icon">▦</span> {{ 'Attendance overview' if user.role == 'admin' else 'Student portal' }}</a>
+   {% if user.role == 'admin' %}<a href="/admin" id="admin-nav" class="nav-link"><span class="nav-icon">⚙</span> Admin console</a>{% endif %}
+   <div class="sidebar-bottom"><div class="sidebar-mini"><div class="pulse-dot"></div><div><b>System online</b><small>Automation-ready workspace</small></div></div><form action="/logout" method="post"><button id="logout-button" class="nav-logout" type="submit">↪ &nbsp; Sign out</button></form></div>
+ </aside>
+ <div class="content-area">
+   <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <b>{{ "Attendance overview" if user.role == "admin" else "Student portal" }}</b></div><div class="identity"><span class="identity-chip">{{ user.role|upper }}</span><div class="avatar">{{ user.name[0] }}</div><div><strong id="account-name">{{ user.name }}</strong><small>{{ user.username }}</small></div></div></header>
+   <main class="main-content">
+    <div class="heading-row"><div><span class="eyebrow">ATTENDANCE MANAGEMENT</span><h1>{{ "Attendance overview" if user.role == "admin" else "Student attendance portal" }}</h1><p class="muted">{{ "Manage student records, review attendance and export accurate reports." if user.role == "admin" else "View attendance and download permitted reports. Student access is read-only." }}</p></div><div class="heading-actions">{% if user.role == 'admin' %}<button id="add-record-btn" class="btn primary">+ &nbsp; Add record</button>{% else %}<span class="readonly-label">View-only access</span>{% endif %}</div></div>
+    <section class="stats-grid"><div class="stat-card"><span class="stat-icon teal">♟</span><div class="stat-label">Total records</div><div class="stat-number" id="stat-total">—</div><span class="stat-foot">All attendance entries</span></div><div class="stat-card"><span class="stat-icon green">✓</span><div class="stat-label">Present</div><div class="stat-number" id="stat-present">—</div><span class="stat-foot">Recorded as present</span></div><div class="stat-card"><span class="stat-icon rose">⊗</span><div class="stat-label">Absent</div><div class="stat-number" id="stat-absent">—</div><span class="stat-foot">Recorded as absent</span></div><div class="stat-card"><span class="stat-icon amber">◷</span><div class="stat-label">Late arrivals</div><div class="stat-number" id="stat-late">—</div><span class="stat-foot">Marked late</span></div></section>
+    <section class="panel records-panel"><div class="panel-header"><div><span class="eyebrow">RECORD DIRECTORY</span><h2>Student attendance</h2><p class="muted smaller">Search, verify and manage attendance records in one place.</p></div><span class="rows-summary" id="total-summary">Loading records...</span></div>
+      <div class="toolbar"><div class="search-group"><input id="search-input" placeholder="Search name, student ID, course or status..." aria-label="Search attendance records"><button id="search-button" class="btn secondary">Search</button><button id="clear-search" class="btn ghost">Clear</button></div><div class="tools-right"><a href="/api/export" id="download-btn" class="btn secondary">↓ Export CSV</a></div></div>
+      <div class="table-scroll"><table id="records-table"><thead><tr><th>STUDENT ID</th><th>STUDENT</th><th>COURSE</th><th>DATE</th><th>STATUS</th>{% if user.role == 'admin' %}<th>ACTIONS</th>{% endif %}</tr></thead><tbody id="record-rows"><tr><td colspan="6">Loading...</td></tr></tbody></table></div>
+      <div class="table-footer"><span id="page-info" class="muted smaller">Page 1</span><div class="page-controls"><button class="btn secondary mini" id="prev-page" disabled>← Previous</button><button class="btn secondary mini" id="next-page">Next →</button></div></div>
+    </section>
+    {% if user.role == 'admin' %}
+    <section class="panel import-panel"><div><span class="eyebrow">BULK OPERATIONS</span><h2>Import attendance CSV</h2><p class="muted smaller">Upload a UTF-8 CSV containing student_code, student_name, course, attendance_date, status and optional notes.</p></div><div class="import-actions"><input aria-label="CSV file" id="csv-file" type="file" accept=".csv,text/csv"><button id="upload-btn" class="btn secondary">↑ Import CSV</button></div><a class="template-link" href="/static/sample_import.csv" download>Download sample CSV template</a></section>
+    {% endif %}
+    <footer class="content-footer">CampusTrack • Group No. 10 &nbsp; | &nbsp; Selenium · TestNG · Maven · GitHub Actions</footer>
+   </main>
+ </div>
+</div>
+{% if user.role == 'admin' %}
+<dialog id="record-modal"><form id="record-form" class="record-form" method="dialog"><div class="modal-head"><div><span class="eyebrow">ATTENDANCE RECORD</span><h2 id="modal-title">Add record</h2></div><button id="close-modal" type="button" class="icon-close" aria-label="Close dialog">×</button></div><div class="form-grid"><div><label for="field-code">Student ID</label><input id="field-code" maxlength="20" placeholder="ST100" required></div><div><label for="field-name">Student name</label><input id="field-name" placeholder="Full name" required></div><div><label for="field-course">Course</label><input id="field-course" placeholder="Data Structures" required></div><div><label for="field-date">Attendance date</label><input id="field-date" type="date" required></div><div><label for="field-status">Attendance status</label><select id="field-status"><option>Present</option><option>Absent</option><option>Late</option></select></div><div><label for="field-notes">Notes</label><input id="field-notes" maxlength="250" placeholder="Optional notes"></div></div><div class="modal-actions"><button type="button" id="cancel-modal" class="btn secondary">Cancel</button><button type="submit" id="save-record" class="btn primary">Save record</button></div></form></dialog>
+{% endif %}
+<div id="toast" role="status" aria-live="polite" class="toast" hidden></div>
+<script src="/static/app.js" defer></script>
+</body></html>

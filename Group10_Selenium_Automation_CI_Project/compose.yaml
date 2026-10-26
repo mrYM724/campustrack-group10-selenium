@@ -1,0 +1,15 @@
+name: campustrack-qa
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      SESSION_SECRET: "local-docker-demo-change-for-production"
+      APP_DB_PATH: /workspace/data/attendance.db
+      TEST_MODE: "0"
+    volumes:
+      - attendance_data:/workspace/data
+    restart: unless-stopped
+volumes:
+  attendance_data:

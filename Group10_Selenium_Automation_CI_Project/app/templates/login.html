@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CampusTrack • {{ role_label }} Login</title><link rel="stylesheet" href="/static/style.css"></head>
+<body class="login-body">
+  <main class="login-layout">
+    <section class="login-story">
+      <div class="brand brand-light"><span class="brand-mark">CT</span><span>Campus<span class="brand-accent">Track</span></span></div>
+      <div class="story-copy"><span class="eyebrow bright">QUALITY ASSURANCE • GROUP NO. 10</span>
+        {% if role == 'admin' %}
+        <h1>Control attendance <em>securely.</em></h1>
+        <p>Administrator-only workspace for managing student attendance and records.</p>
+        <div class="story-points"><div><span class="point-icon">✓</span> Add, edit and delete records</div>
+        <div><span class="point-icon">✓</span> Import records and export reports</div>
+        <div><span class="point-icon">✓</span> Restricted administrative console</div></div>
+        {% else %}
+        <h1>Your attendance, <em>clearly.</em></h1>
+        <p>A separate read-only student workspace to view, search and export permitted attendance information.</p>
+        <div class="story-points"><div><span class="point-icon">✓</span> View attendance records</div>
+        <div><span class="point-icon">✓</span> Search and navigate pages</div>
+        <div><span class="point-icon">✓</span> Download permitted reports</div></div>
+        {% endif %}
+      </div>
+      <div class="login-footer">COMPUTER ENGINEERING · GROUP NO. 10</div>
+    </section>
+    <section class="login-side">
+      <div class="login-card">
+        <a class="back-link" href="/login">← Choose another portal</a>
+        <span class="eyebrow">{{ role_label|upper }} ACCESS ONLY</span>
+        <h2>{{ role_label }} sign in</h2>
+        <p class="muted">This login accepts only {{ 'administrator' if role == 'admin' else 'student' }} accounts.</p>
+        {% if error %}<div class="alert danger" id="login-error" role="alert">Invalid username or password for this portal. Please try again.</div>{% endif %}
+        <form method="post" action="{{ '/admin/login' if role == 'admin' else '/student/login' }}" id="login-form">
+          <label for="login-username">Username</label>
+          <input id="login-username" name="username" placeholder="Enter {{ role_label|lower }} username" autocomplete="username" required>
+          <label for="login-password">Password</label>
+          <input id="login-password" name="password" placeholder="Enter password" type="password" autocomplete="current-password" required>
+          <button type="submit" id="login-submit" class="btn primary full">Sign in as {{ role_label }} <span>→</span></button>
+        </form>
+        <div class="demo-box"><div class="demo-title">{{ role_label|upper }} DEMONSTRATION ACCOUNT</div>
+          <div class="demo-user"><strong>{{ role_label }}</strong><code>{{ 'admin / Admin@123' if role == 'admin' else 'student / Student@123' }}</code></div>
+        </div>
+        <small class="login-note">Educational demonstration only. Do not use these credentials for a real deployment.</small>
+      </div>
+    </section>
+  </main>
+</body></html>

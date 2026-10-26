@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="CampusTrack Full Regression Suite" verbose="1" parallel="none">
+  <listeners><listener class-name="com.group10.automation.ExtentListener"/></listeners>
+  <test name="All Browser Scenarios">
+    <classes>
+      <class name="com.group10.automation.LoginRoleTests"/>
+      <class name="com.group10.automation.CrudSearchTests"/>
+      <class name="com.group10.automation.TablePaginationTests"/>
+      <class name="com.group10.automation.FileTransferTests"/>
+    </classes>
+  </test>
+</suite>

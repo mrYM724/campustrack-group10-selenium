@@ -1,0 +1,22 @@
+Test ID,Feature,Scenario,Expected Result
+TC01,Admin login,Admin valid credentials,Admin can see dashboard
+TC02,User login,User valid credentials,Read-only dashboard
+TC03,Admin authorization,Visit admin console,Allowed
+TC04,User authorization,Direct admin URL,403 and link hidden
+TC05,User API restrictions,POST record as viewer,HTTP 403
+TC06,Invalid credentials,Wrong admin password,Rejected
+TC07,Create,Add student attendance,Row appears
+TC08,Update,Edit student/status,Row changed
+TC09,Delete,Remove record,Row gone
+TC10,Search match,Search Aarav Mehta,Exactly one match
+TC11,Search no match,Search imaginary name,Empty state
+TC12,Table verification,Check first page,"10 rows, correct data"
+TC13,Pagination,Next and previous,Correct range
+TC14,User table roles,Open as viewer,No CRUD buttons
+TC15,Valid import,Upload two CSV rows,Rows imported
+TC16,Invalid import,Upload bad header CSV,Rejected without mutation
+TC17,Admin export,Download report,CSV exists and matches expected contents
+TC18,Viewer export,Download report,CSV exists and contains sample data
+TC19,Separate portal chooser,Role based access,No combined login form; both role links visible
+TC20,Student tries administrator login,Role based access,Role-mismatched authentication rejected
+TC21,Admin tries student login,Role based access,Role-mismatched authentication rejected

@@ -1,0 +1,3 @@
+student_code,student_name,course,attendance_date,status,notes
+ST901,Sample Student One,DevOps Lab,2026-10-20,Present,Imported from CSV
+ST902,Sample Student Two,Computer Networks,2026-10-20,Late,Imported from CSV
