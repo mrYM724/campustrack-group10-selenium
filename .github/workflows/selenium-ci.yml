@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: Group10_Selenium_Automation_CI_Project
     env:
-      APP_DB_PATH: ${{ runner.temp }}/campustrack-ci.db
+      APP_DB_PATH: /tmp/campustrack-ci.db
       SESSION_SECRET: github-ci-session-secret-for-educational-demo
       TEST_MODE: '1'
       TEST_TOKEN: local-ci-demo-token
