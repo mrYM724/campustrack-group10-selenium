@@ -62,7 +62,24 @@ public abstract class BaseTest {
 
     protected WebElement el(String id) { return wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(id))); }
     protected WebElement find(By selector) { return wait.until(ExpectedConditions.visibilityOfElementLocated(selector)); }
-    protected void click(String id) { wait.until(ExpectedConditions.elementToBeClickable(By.id(id))).click(); }
+    protected void click(String id) {
+        By locator = By.id(id);
+        // elementToBeClickable checks visibility/enabled state, but it does not
+        // guarantee that the element is unobstructed at Chrome's click point.
+        // Centering avoids headless Chrome's edge-of-viewport interceptions.
+        wait.until(d -> {
+            WebElement button = ExpectedConditions.elementToBeClickable(locator).apply(d);
+            if (button == null) return false;
+            try {
+                ((JavascriptExecutor) d).executeScript(
+                    "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", button);
+                button.click(); // Real WebDriver click; don't bypass the UI with JS.
+                return true;
+            } catch (ElementClickInterceptedException | StaleElementReferenceException ex) {
+                return false; // Retry until clickable (or the wait times out).
+            }
+        });
+    }
     protected void type(String id, String value) { WebElement field = el(id); field.clear(); field.sendKeys(value); }
 
     protected void login(String username, String password) {
